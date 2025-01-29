@@ -1,0 +1,50 @@
+{% load static %}
+
+<body class="bg-gray-100 text-gray-800">
+    <!-- Header -->
+    {% include 'header.html' %}
+
+    <!-- Main Content -->
+    <main class="container mx-auto mt-8 px-4">
+        <!-- Description Section -->
+        <section class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-blue-900 mb-4">Welcome to FitMore</h2>
+            <p class="text-lg text-white ">
+                At <span class="font-bold">FitMore</span>, we believe in empowering individuals to achieve their fitness goals. Whether you’re tracking your workouts, monitoring progress, or seeking inspiration, FitMore is here to support you every step of the way.
+            </p>
+        </section>
+
+        <!-- Fitness Quotes Section -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            <div class="text-center">
+                <img src="{% static 'images/1.jpg' %}" alt="Fitness Image" class="mx-auto rounded-lg shadow w-full h-64 object-cover">
+                <p class="mt-4 text-xl text-white italic">"The only bad workout is the one that didn’t happen."</p>
+            </div>
+            <div class="text-center">
+                <img src="{% static 'images/2.jpg' %}" alt="Fitness Image" class="mx-auto rounded-lg shadow w-full h-64 object-cover">
+                <p class="mt-4 text-xl text-white">"Push yourself, because no one else is going to do it for you."</p>
+            </div>
+            <div class="text-center">
+                <img src="{% static 'images/3.jpg' %}" alt="Fitness Image" class="mx-auto rounded-lg shadow w-full h-64 object-cover">
+                <p class="mt-4 text-xl text-white italic">"Success starts with self-discipline."</p>
+            </div>
+            <div class="text-center">
+                <img src="{% static 'images/4.jpg' %}" alt="Fitness Image" class="mx-auto rounded-lg shadow w-full h-64 object-cover">
+                <p class="mt-4 text-xl text-white italic">"What seems impossible today will one day become your warm-up."</p>
+            </div>
+            <div class="text-center">
+                <img src="{% static 'images/5.jpg' %}" alt="Fitness Image" class="mx-auto rounded-lg shadow w-full h-64 object-cover">
+                <p class="mt-4 text-xl text-white">"Your body can stand almost anything. It’s your mind that you have to convince."</p>
+            </div>
+            <div class="text-center">
+                <img src="{% static 'images/6.jpg' %}" alt="Fitness Image" class="mx-auto rounded-lg shadow w-full h-64 object-cover">
+                <p class="mt-4 text-xl text-white">"Don’t limit your challenges. Challenge your limits."</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    {% include 'footer.html' %}
+</body>
+
+</html>
