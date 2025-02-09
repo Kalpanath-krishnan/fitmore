@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home ,userPage,registerPage,login_view,profile_view,logout,assign_recommended_workouts# Import the home view from your views module
+from .views import home ,userPage,registerPage,login_view,profile_view,logout,assign_workouts,tracking# Import the home view from your views module
 
 
 urlpatterns = [
@@ -9,6 +9,7 @@ urlpatterns = [
     path('user/login/',login_view,name='login'),
     path('profile/',profile_view,name='profile'),
     path('user/logout/',logout,name='logout'),
-    path('assign-recommended-workouts/', assign_recommended_workouts, name='assign_recommended_workouts'),
+    path('assign-recommended-workouts/', assign_workouts, name='assign_recommended_workouts'),
+    path('tracking/',tracking,name='tracking')
     
 ]

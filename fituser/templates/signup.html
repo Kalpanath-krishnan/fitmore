@@ -29,7 +29,16 @@
 
         <form method="POST" enctype="multipart/form-data" class="mt-6">
             {% csrf_token %}
-            
+
+            {% if messages %}
+              <div class="max-w-md mx-auto mt-4">
+              {% for message in messages %}
+                <div class="p-4 mb-4 text-white {% if message.tags == 'success' %} bg-green-500 {% else %} bg-red-500 {% endif %} rounded">
+                {{ message }}
+                </div>
+              {% endfor %}
+              </div>
+            {% endif %}
             <div class="mb-4">
                 <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
                 <input type="text" id="username" name="username" required

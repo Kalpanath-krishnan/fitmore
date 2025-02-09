@@ -10,7 +10,7 @@ from .models import (
 # Register all models in the admin panel
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'fullname', 'height', 'weight', 'bmi')  # Customize displayed fields
+    list_display = ('username', 'fullname', 'height', 'weight', 'bmi','recommended_goal')  # Customize displayed fields
     search_fields = ('username', 'fullname')
     list_filter = ('bmi',)
 
