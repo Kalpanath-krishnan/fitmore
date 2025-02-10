@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate,login
 from django.db import models
 from fituser.models import CustomUser
+from fituser.models import UserWorkoutTracking
 import pandas as pd
 from fituser.models import (
     WeightLossWorkout,
@@ -13,6 +14,20 @@ from fituser.models import (
     RehabilitationWorkout,
     
 )
+
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
+import matplotlib
+matplotlib.use("Agg")  # Use non-GUI backend
+from collections import defaultdict
+import datetime
+
+
+from collections import Counter
+from django.http import JsonResponse
+from django.conf import settings
+import requests
 
 
 
@@ -183,36 +198,129 @@ def assign_workouts(request):
     return render(request,"workout_plan.html",{'user_data':user_data,'workouts':workouts})
 @login_required
 def tracking(request):
-     user=request.user
-     goal=user.recommended_goal
+    if request.method == "POST":
+        user = request.user
+        goal = user.recommended_goal
 
+        workout_day = request.POST.get('workout_day')
+        workout_activity = request.POST.get('workout_activity')
 
-     name=user.username   
-     workout_day=request.POST['workout_day']
-     workout_activity=request.POST['workout_activity']
-     print(user,goal,workout_day,workout_activity)
+        # Save tracking details using workout_day
+        tracking_entry = UserWorkoutTracking.objects.create(
+            user=user,
+            goal=goal,
+            workout_day=workout_day,
+            workout=workout_activity,  # Now using workout_day instead of workout_id
+            status='completed',
+        )
 
-     
+        print(f"Saved: {tracking_entry}")
 
+        return redirect('assign_recommended_workouts')
 
+    return redirect('profile')
 
-       
+@login_required
+def undo_tracking(request):
+    if request.method == "POST":
+        user = request.user
+        workout_day = request.POST.get('workout_day')
+        workout_activity = request.POST.get('workout_activity')
 
+        # Find and delete the latest matching workout entry
+        tracking_entry = UserWorkoutTracking.objects.filter(
+            user=user, workout_day=workout_day, workout=workout_activity
+        ).last()  # Get the latest entry
+
+        if tracking_entry:
+            tracking_entry.delete()  # Delete the entry
+            print(f"Deleted tracking entry for: {user.username} - {workout_day} - {workout_activity}")
+
+        return redirect('assign_recommended_workouts')
+
+    return redirect('profile')
+
+@login_required
+def workout_tracking_view(request):
+    user = request.user
+    user_data = {
+            'user_id': user.id,
+            'username': user.username,
+            'fullname': user.fullname,
+            'height': user.height,
+            'weight': user.weight,
+            'profile_picture': user.profile_picture if user.profile_picture else None,
+            'bmi': user.bmi if user.bmi else "Not Available",
+            'recommended_goal': user.recommended_goal,  # ✅ Ensure goal is calculated
+  # ✅ Pass recommended workouts
+        }
+    tracking_data = UserWorkoutTracking.objects.filter(user=user)
+
+    # Organize workouts into weeks (Monday to Sunday)
+    weekly_progress = defaultdict(lambda: {"completed": 0, "total": 7})  # Each week is 7 days
+
+    for entry in tracking_data:
+        try:
+            # Convert workout_day (e.g., "Monday") to a date
+            today = datetime.date.today()
+            days_map = {
+                "Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3,
+                "Friday": 4, "Saturday": 5, "Sunday": 6
+            }
+            workout_day_index = days_map.get(entry.workout_day, -1)
+
+            if workout_day_index == -1:
+                continue  # Skip invalid days
+
+            # Get the start of the week (Monday)
+            week_start = today - datetime.timedelta(days=today.weekday())
+            workout_date = week_start + datetime.timedelta(days=workout_day_index)
+            week_label = workout_date.strftime("%Y-%m-%d")  # Store weeks as "YYYY-MM-DD"
+
+            if entry.status == "completed":
+                weekly_progress[week_label]["completed"] += 1  # Count completed days
+
+        except ValueError:
+            continue  # Skip invalid date conversions
+
+    # Ensure correct total for weeks
+    completed_counts = sum(week["completed"] for week in weekly_progress.values())
+    total_counts = sum(week["total"] for week in weekly_progress.values())
+
+    # Avoid division by zero
+    completion_percentage = (completed_counts / total_counts) * 100 if total_counts else 0
+
+    # Generate the doughnut chart
+    plt.figure(figsize=(8, 8))
+    plt.pie(
+        [completion_percentage, 100 - completion_percentage],
+        labels=["Completed Workouts", "Pending Workouts"],
+        autopct="%1.1f%%",
+        colors=["#34D399", "#FACC15"],
+        wedgeprops={"linewidth": 2, "edgecolor": "white"}
+    )
+    plt.title("Overall Workout Completion")
+
+    # Draw a white circle at the center to make it a doughnut chart
+    centre_circle = plt.Circle((0, 0), 0.70, fc="white")
+    fig = plt.gcf()
+    fig.gca().add_artist(centre_circle)
+
+    # Save the chart to a BytesIO buffer
+    buffer = BytesIO()
+    plt.savefig(buffer, format="png", bbox_inches="tight")
+    buffer.seek(0)
+    chart_image = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    buffer.close()
+
+    return render(request, "tracking.html", {"tracking_data": tracking_data, "chart_image": chart_image, "user_data":user_data})
+def gym_locator(request):
+    return render(request,'gym_locator.html')
 def logout(request):
      auth.logout(request)
      return redirect('home')
 
-     
-     
+GOOGLE_PLACES_API_KEY = "AIzaSyARGnV45YeOAdOZ_yH61flYVyL8jw1FwiI"
 
-
-
-
-
-
-
-
-
-
-        
-    
+def find_nearby_gyms(request):
+   return render(request,'gym_locator.html')

@@ -5,53 +5,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - FitMore</title>
+
+    <!-- Fonts & Tailwind -->
     <link href="https://fonts.googleapis.com/css2?family=Aquire&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
+        /* Background Styling */
         body {
             font-family: 'Aquire', sans-serif;
-            background-image: url('{% static "images/background.jpg" %}'); /* Add background image */
+            background-image: url('{% static "images/background.jpg" %}');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
     </style>
 </head>
+
 <body class="bg-gray-100 bg-opacity-80 text-gray-800">
+    <!-- Include Header -->
     {% include 'header.html' %}
-    
+
     <!-- Motivational Section -->
-    <div class="max-w-4xl mx-auto text-center mt-10 p-6 bg-white bg-opacity-80 shadow-lg rounded-lg">
-        <h2 class="text-3xl font-bold text-blue-900">Welcome to FitMore</h2>
-        <p class="mb-3 text-blue-500 dark:text-blue-400   first-letter:text-5xl first-letter:font-normal first-letter:text-white dark:first-letter:text-black first-letter:me-3 first-letter:float-start">At FitMore, we believe that fitness is not just about workouts; it's a lifestyle. Our goal is to empower you to take control of your health and push beyond your limits.
-            At FitMore, we believe that fitness is not just about workouts; it's a lifestyle. Our goal is to empower you to take control of your health and push beyond your limits.
+    <div class="max-w-3xl mx-auto bg-white bg-opacity-95 p-6 rounded-lg shadow-xl text-center mt-24">
+        <h1 class="text-3xl font-extrabold text-gray-900">Welcome to FitMore</h1>
+        <p class="text-lg text-gray-700 mt-2">
+            At FitMore, we believe that fitness is not just about workouts; it's a lifestyle. 
+            Our goal is to empower you to take control of your health and push beyond your limits.
         </p>
-        <p class="text-lg italic text-gray-600 mt-4">"Your only limit is the one you set yourself. Keep pushing, keep improving."</p>
+        <p class="text-lg italic text-gray-600 mt-2">
+            "Your only limit is the one you set yourself. Keep pushing, keep improving."
+        </p>
     </div>
     
     <!-- Profile Form -->
-    <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6 mt-10 backdrop-blur-md bg-opacity-80">
+    <div class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8 mt-10 backdrop-blur-md bg-opacity-90">
         <h2 class="text-3xl font-bold text-blue-900 text-center mb-6">Get Charged!!!</h2>
-        <p class="text-lg font-bold text-blue-900">BMI: {{ user.bmi }}</p>
+        
+        <!-- BMI Section -->
+        <div class="text-center">
+            <p class="text-xl font-semibold text-gray-800">
+                <span class="text-blue-900 font-bold">BMI:</span> {{ user.bmi }}
+            </p>
+            <h3 class="text-xl font-bold text-blue-900 mt-4">Recommended Goal:</h3>
+            <p class="text-lg font-semibold text-green-600">{{ user.recommended_goal }}</p>
+        </div>
 
-<h3 class="text-xl font-bold text-blue-900 mt-6">Recommended Goal:{{user.recommended_goal}}</h3>
-<p class="text-lg font-semibold text-green-600">
-
-</p>
-
-<form action="{% url 'assign_recommended_workouts' %}" method="POST">
-    {% csrf_token %}
-
-    <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-green-500 transition">
-        Assign Workouts Based on BMI
-
-    </button>
-</form>
+        <!-- Buttons for Workout & Tracking -->
+        <form action="{% url 'assign_recommended_workouts' %}" method="POST">
+            {% csrf_token %}
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-6">
+                <button type="submit" formaction="{% url 'workout_tracking' %}" 
+                        class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-500 transition text-lg">
+                    Track Your Progress
+                </button>
+                <button type="submit" 
+                        class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-500 transition text-lg">
+                    Assign Workouts Based on BMI
+                </button>
+            </div>
+        </form>
     </div>
-    <div>
 
-    </div>
-    
+    <!-- Include Footer -->
     {% include 'footer.html' %}
 </body>
 </html>

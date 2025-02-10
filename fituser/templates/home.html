@@ -1,48 +1,33 @@
 {% load static %}
 
-<body class="bg-gray-100 text-gray-800 ">
+<body class="bg-gray-100 text-white ">
     <!-- Header -->
     {% include 'header.html' %}
 
     <!-- Main Content -->
-    <main class="container mx-auto mt-8 px-4 justify-center items-center">
-        <!-- Description Section -->
-        <section class="text-center mb-12">
-            <h2 class="text-4xl font-bold text-white mb-4">Welcome to FitMore</h2>
-            <p class="text-lg text-white ">
-                At <span class="font-bold">FitMore</span>, we believe in empowering individuals to achieve their fitness goals. Whether you’re tracking your workouts, monitoring progress, or seeking inspiration, FitMore is here to support you every step of the way.
-            </p>
-        </section>
+    <section class="hero-section">
+        <h1 class="hero-title">Elevate Your Fitness with FitMore</h1>
+        <p class="hero-description">
+            FitMore is not just a gym; it’s an entire ecosystem designed to empower you on your fitness journey. 
+            Whether you’re a beginner looking to start small or a seasoned athlete aiming for new personal records, 
+            FitMore provides world-class equipment, expert trainers, and a vibrant community to keep you motivated.
+        </p>
+        <p class="hero-description">
+            Our mission is to blend cutting-edge technology with personalized fitness plans, ensuring that every 
+            workout session is efficient and enjoyable. With a focus on holistic well-being, FitMore integrates 
+            strength training, cardio workouts, and recovery techniques to help you achieve peak performance.
+        </p>
+    </section>
 
-        <!-- Fitness Quotes Section -->
-        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            <div class="text-center">
-                <img src="{% static 'images/1.jpg' %}" alt="Fitness Image" class="mx-auto rounded-lg shadow w-full h-64 object-cover">
-                <p class="mt-4 text-xl text-white italic">"The only bad workout is the one that didn’t happen."</p>
-            </div>
-            <div class="text-center">
-                <img src="{% static 'images/2.jpg' %}" alt="Fitness Image" class="mx-auto rounded-lg shadow w-full h-64 object-cover">
-                <p class="mt-4 text-xl text-white">"Push yourself, because no one else is going to do it for you."</p>
-            </div>
-            <div class="text-center">
-                <img src="{% static 'images/3.jpg' %}" alt="Fitness Image" class="mx-auto rounded-lg shadow w-full h-64 object-cover">
-                <p class="mt-4 text-xl text-white italic">"Success starts with self-discipline."</p>
-            </div>
-            <div class="text-center">
-                <img src="{% static 'images/4.jpg' %}" alt="Fitness Image" class="mx-auto rounded-lg shadow w-full h-64 object-cover">
-                <p class="mt-4 text-xl text-white italic">"What seems impossible today will one day become your warm-up."</p>
-            </div>
-            <div class="text-center">
-                <img src="{% static 'images/5.jpg' %}" alt="Fitness Image" class="mx-auto rounded-lg shadow w-full h-64 object-cover">
-                <p class="mt-4 text-xl text-white">"Your body can stand almost anything. It’s your mind that you have to convince."</p>
-            </div>
-            <div class="text-center">
-                <img src="{% static 'images/6.jpg' %}" alt="Fitness Image" class="mx-auto rounded-lg shadow w-full h-64 object-cover">
-                <p class="mt-4 text-xl text-white">"Don’t limit your challenges. Challenge your limits."</p>
-            </div>
-        </section>
-    </main>
-
+    <!-- Image Grid -->
+    <section class="uneven-images">
+        <img src="{% static 'images/1.jpg' %}" alt="State-of-the-art Equipment">
+        <img src="{% static 'images/2.jpg' %}" alt="Dynamic Workout Spaces">
+        <img src="{% static 'images/3.jpg' %}" alt="Community-driven Fitness">
+        <img src="{% static 'images/4.jpg' %}" alt="Expert Training Sessions">
+        <img src="{% static 'images/5.jpg' %}" alt="Modern Facilities">
+        <img src="{% static 'images/6.jpg' %}" alt="Modern Facilities">
+    </section>
     <!-- Footer -->
     {% include 'footer.html' %}
 </body>

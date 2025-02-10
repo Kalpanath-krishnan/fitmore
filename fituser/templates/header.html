@@ -4,55 +4,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FitMore - Home</title>
+    <title>FitMore - Elevate Your Fitness Journey</title>
     <link href="https://fonts.googleapis.com/css2?family=Aquire&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+    <link href="{%static 'css/style.css'%}" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body {
-            font-family: "Anton", serif;
-  font-weight: 400;
-  font-style: normal;        }
-    </style>
-</head>
-<body class="bg-gray-100 text-gray-800" class="bg-[url(/img/1.jpg)]">
-    <!-- Header -->
-    <header class="bg-black-100  py-4">
-        <div class="container mx-auto flex justify-between items-center bg-grey-90">
-            <div class="flex items-center space-x-3">
-                <img src="{% static 'images/logo.jpg' %}" alt="FitMore Logo" class="h-10 w-10 rounded-full">
-                <a href="/"><h1 class="text-3xl  font-bold text-white ">FitMore</h1></a>
-            </div>
-            <nav class="space-x-4 flex items-center ">
-                {% if user.is_authenticated %}
-                    <div class="flex items-center space-x-4">
-                        <img src="{{user_data.profile_picture}}" alt="Profile Image" class="h-10 w-10 rounded-full">
-                        <h6 class="font-bold text-white">Welcome, {{ user_data.fullname}}</h6>
-                      
-                        <a href="{%url 'logout'%}" class="font-bold text-white hover:underline ml-4">Logout</a>
-                    </div>
-                    
-                {% else %}
-                    <a href="{% url 'user' %}" class="font-bold text-white hover:underline">Login</a>
-                    <a href="{% url 'signup' %}" class="font-bold text-white hover:underline">Signup</a>
-                {% endif %}
-                <a href="/gym-locator" class=" font-bold text-white  hover:underline">Locate Gym</a>
-            </nav>
-        </div>
-    </header>
-    <style>
-        body {
-            font-family: 'Aquire', sans-serif;
-            background-image: url('{% static "images/background.jpg" %}'); /* Add background image */
+            font-family: "Orbitron", sans-serif;
+            background-image: url('{% static "images/background.jpg" %}');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            
+            color: white;
+        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(52, 43, 43, 0.7);
+            padding: 20px;
+            border-bottom: 2px solid #822f31;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        .logo-text {
+            font-size: 2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .nav-link {
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #ff9800;
+            transform: scale(1.1);
+        }
+        .hero-section {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        .hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .hero-description {
+            max-width: 700px;
+            margin: 20px auto;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+        .uneven-images {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 40px;
+        }
+        .uneven-images img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(255, 152, 0, 0.7);
+        }
+        .uneven-images img:nth-child(odd) {
+            transform: translateY(20px);
+        }
+        .uneven-images img:nth-child(even) {
+            transform: translateY(-20px);
         }
     </style>
-
+</head>
+<body>
+    <!-- Header -->
+    <header class="fixed top-0 left-0 w-full bg-black bg-opacity-95 py-4 shadow-lg z-50">
+        <div class="container mx-auto flex justify-between items-center px-6">
+            <div class="flex items-center space-x-3">
+                <img src="{% static 'images/logo.jpg' %}" alt="FitMore Logo" class="h-12 w-12 rounded-full shadow-md">
+                <a href="/" class="text-3xl font-bold text-white tracking-wide">FitMore</a>
+            </div>
+            <nav class="flex space-x-6">
+                {% if user.is_authenticated %}
+                    <div class="flex items-center space-x-4">
+                        <img src="{{ user_data.profile_picture }}" alt="Profile Image" class="h-10 w-10 rounded-full border-2 border-orange-400">
+                        <h6 class="text-white font-semibold text-lg">Hi, {{ user_data.fullname }}</h6>
+                        <a href="{% url 'logout' %}" class="text-white hover:text-orange-400 font-medium transition">Logout</a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'user' %}" class="text-white hover:text-orange-400 font-medium transition">Login</a>
+                    <a href="{% url 'signup' %}" class="text-white hover:text-orange-400 font-medium transition">Signup</a>
+                {% endif %}
+                <a href="{%url 'find_nearby_gyms'%}" class="text-white hover:text-orange-400 font-medium transition">Locate Gym</a>
+            </nav>
+        </div>
+    </header>
     <!-- Main Content -->
 
     <!-- Footer -->

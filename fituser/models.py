@@ -98,8 +98,9 @@ class UserWorkoutTracking(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     goal = models.CharField(max_length=50, choices=GOAL_CHOICES)
-    workout_id = models.IntegerField()
+    workout_day = models.CharField(max_length=20)  # Changed from workout_id to workout_day
+    workout = models.CharField(max_length=255,default="")  # Added column to store workout name/activity
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='not_completed')
 
     def __str__(self):
-        return f"{self.user.username} - {self.goal} - Workout {self.workout_id} - {self.status}"
+        return f"{self.user.username} - {self.goal} - Day {self.workout_day} - {self.workout} - {self.status}"

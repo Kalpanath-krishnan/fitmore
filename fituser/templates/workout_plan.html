@@ -7,51 +7,42 @@
     <title>Workout Plan - FitMore</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-100 text-gray-800">
-    <script>
-        function changeButtonColor(event) {
-            event.preventDefault(); // Prevent default form submission temporarily
-            let clickedButton = event.submitter;
-            
-            if (clickedButton.name === "action" && clickedButton.value === "done") {
-                clickedButton.classList.remove("bg-gradient-to-r", "from-purple-500", "via-purple-600", "to-purple-700");
-                clickedButton.classList.add("bg-green-500", "hover:bg-green-600"); // Change color to green
-            } else if (clickedButton.name === "action" && clickedButton.value === "undo") {
-                clickedButton.classList.remove("bg-red-500", "hover:bg-red-600");
-                clickedButton.classList.add("bg-yellow-500", "hover:bg-yellow-600"); // Change color to yellow
-            }
-            
-            setTimeout(() => event.target.submit(), 500); // Submit the form after color change
-        }
-        </script>
     
     {% include 'header.html' %}
 
-    <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-lg">
-        <h2 class="text-3xl font-bold text-blue-900 text-center">{{ goal|title }} Workout Plan</h2>
-        <table class="table-auto w-full border-collapse border border-gray-300">
+    <div class="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-lg shadow-lg">
+        <h2 class="text-3xl font-bold text-blue-900 text-center mb-6">{{ goal|title }} Workout Plan</h2>
+        
+        <table class="table-auto w-full border-collapse border border-gray-400 shadow-lg">
             <thead>
-                <tr class="bg-gray-200">
-                    <th class="border border-gray-300 px-4 py-2">Day</th>
-                    <th class="border border-gray-300 px-4 py-2">Activity</th>
-                    <th class="border border-gray-300 px-4 py-2">Status</th>
+                <tr class="bg-gray-300 text-gray-900 font-semibold text-lg">
+                    <th class="border border-gray-400 px-6 py-3">Day</th>
+                    <th class="border border-gray-400 px-6 py-3">Activity</th>
+                    <th class="border border-gray-400 px-6 py-3">Status</th>
                 </tr>
             </thead>
             <tbody>
                 {% for workout in workouts %}
-                <tr>
-                    <td class="border border-gray-300 px-4 py-2">{{ workout.day }}</td>
-                    <td class="border border-gray-300 px-4 py-2">{{ workout.activity }}</td>
-                    <td>
-                        <form action="{%url 'tracking'%}" method="POST">
+                <tr class="hover:bg-gray-100 transition">
+                    <td class="border border-gray-400 px-6 py-3 text-center">{{ workout.day }}</td>
+                    <td class="border border-gray-400 px-6 py-3">{{ workout.activity }}</td>
+                    <td class="border border-gray-400 px-6 py-3 text-center">
+                        <form action="{% url 'tracking' %}" method="POST" onsubmit="changeButtonColor(event)">
                             {% csrf_token %}
                             <input type="hidden" name="workout_day" value="{{ workout.day }}">
                             <input type="hidden" name="workout_activity" value="{{ workout.activity }}">
-                            <button type="submit" id="doneButton" name="action" value="done" class="border border-gray-300 px-4 py-2 text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                            
+                            <!-- Done Button -->
+                            <button type="submit" name="action" value="done"
+                                class="border border-gray-400 px-5 py-2.5 text-white bg-green-500 hover:bg-green-600 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm transition">
                                 Done
                             </button>
                             
-                            <button type="submit" id="undoButton" name="action" value="undo" formaction="" class="border border-gray-300 px-4 py-2 text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                            <!-- Undo Button -->
+                            <button type="submit" name="action" value="undo" formaction="{% url 'undo' %}"
+                                class="border border-gray-400 px-5 py-2.5 text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm transition">
                                 Undo
                             </button>
                         </form>
@@ -59,20 +50,46 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="3" class="text-center text-gray-500 py-4">No Workouts Available</td>
+                    <td colspan="3" class="text-center text-gray-600 font-semibold py-6 bg-gray-200 rounded-lg">
+                        No Workouts Available 🚀
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 
-    <div class="text-center mt-6">
-        <a href="{% url 'profile' %}" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-500">
+    <div class="text-center mt-8">
+        <a href="{% url 'profile' %}" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-500 font-semibold">
             Back to Profile
         </a>
     </div>
 
     {% include 'footer.html' %}
+
+    <script>
+        function changeButtonColor(event) {
+            event.preventDefault(); // Prevent immediate form submission for UI feedback
+            let clickedButton = event.submitter;
+
+            if (clickedButton.name === "action" && clickedButton.value === "done") {
+                clickedButton.disabled = true; // Disable button immediately
+                clickedButton.classList.remove("bg-green-500", "hover:bg-green-600");
+                clickedButton.classList.add("bg-gray-400"); // Change to gray to indicate completion
+                clickedButton.innerText = "Completed"; // Change text
+            } else if (clickedButton.name === "action" && clickedButton.value === "undo") {
+                let doneButton = event.target.querySelector("[name='action'][value='done']");
+                if (doneButton) {
+                    doneButton.disabled = false; // Re-enable "Done" button
+                    doneButton.classList.remove("bg-gray-400");
+                    doneButton.classList.add("bg-green-500", "hover:bg-green-600");
+                    doneButton.innerText = "Done";
+                }
+            }
+            
+            setTimeout(() => event.target.submit(), 500); // Allow UI change before submitting
+        }
+    </script>
 
 </body>
 </html>
